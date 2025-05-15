@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "customer",
      'widget_tweaks',
+      'mathfilters',
 ]
 
 MIDDLEWARE = [
@@ -56,7 +57,7 @@ ROOT_URLCONF = "MyProject.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [ BASE_DIR / "templates" ],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -73,12 +74,26 @@ LOGIN_URL = 'login'  # This should match the name of your login URL pattern
 LOGIN_REDIRECT_URL = 'dashboard'  # Where to redirect after login
 LOGOUT_REDIRECT_URL = 'index'  # Where to redirect after logout
 
+import os
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+
+
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'flipkart_clone',
+        'USER': 'postgres',
+        'PASSWORD': '1234',
+        'HOST': 'localhost',  # or your DB server IP
+        'PORT': '5432',       # default PostgreSQL port
     }
 }
 
@@ -128,3 +143,14 @@ STATICFILES_DIRS = [
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 AUTH_USER_MODEL = 'customer.User'
+
+# settings.py
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'  # or your SMTP
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'kalyanikhanavkar27@gmail.com'
+EMAIL_HOST_PASSWORD = 'yuqd jyzw uiwp saqx'
+DEFAULT_FROM_EMAIL = 'Shop Admin <kalyanikhanavkar27@gmail.com>'

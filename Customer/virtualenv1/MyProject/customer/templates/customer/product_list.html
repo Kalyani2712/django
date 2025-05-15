@@ -1,0 +1,658 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flipkart Clone - Product Listing</title>
+    
+    <!-- Proper Bootstrap CSS -->
+   <!-- Bootstrap CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Custom CSS -->
+    <style>
+        :root {
+            --flipkart-blue: #2874f0;
+            --flipkart-yellow: #ffe500;
+            --flipkart-dark: #172337;
+            --flipkart-light: #f1f3f6;
+        }
+        
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            background-color: var(--flipkart-light);
+        }
+        
+        /* Enhanced Header */
+        .top-header {
+            background-color: var(--flipkart-blue);
+            color: white;
+            font-size: 14px;
+            padding: 10px 0;
+        }
+        
+        .main-header {
+            background-color: white;
+            box-shadow: 0 1px 4px 0 rgba(0,0,0,.1);
+        }
+        
+        .logo {
+            color: var(--flipkart-yellow);
+            font-weight: 800;
+            font-size: 24px;
+        }
+        
+        .logo span {
+            color: white;
+            font-style: italic;
+            font-size: 12px;
+            vertical-align: super;
+        }
+        
+        .search-container {
+            width: 100%;
+            max-width: 550px;
+        }
+        
+        .search-box {
+            border-radius: 2px 0 0 2px;
+            border: none;
+            padding: 12px 15px;
+            box-shadow: 0 2px 4px 0 rgba(0,0,0,.23);
+        }
+        
+        .search-btn {
+            background-color: var(--flipkart-yellow);
+            color: var(--flipkart-blue);
+            border-radius: 0 2px 2px 0;
+            border: none;
+            padding: 0 20px;
+            box-shadow: 0 2px 4px 0 rgba(0,0,0,.23);
+        }
+        
+        .header-action {
+            color: var(--flipkart-blue);
+            font-weight: 500;
+            padding: 10px 15px;
+        }
+        
+        .header-action i {
+            margin-right: 5px;
+        }
+        
+        /* Horizontal Product List */
+        .product-list-container {
+            background: white;
+            border-radius: 2px;
+            box-shadow: 0 1px 1px 0 rgba(0,0,0,.1);
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .product-item {
+            display: flex;
+            padding: 15px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .product-item:last-child {
+            border-bottom: none;
+        }
+        
+        .product-img-container {
+            width: 180px;
+            height: 180px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+        }
+        
+        .product-img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+        
+        .product-details {
+            flex-grow: 1;
+            padding: 0 20px;
+        }
+        
+        .product-title {
+            font-size: 16px;
+            font-weight: 500;
+            color: #212121;
+            margin-bottom: 10px;
+        }
+        
+        .product-seller {
+            font-size: 14px;
+            color: #878787;
+            margin-bottom: 8px;
+        }
+        
+        .product-rating {
+            background-color: #388e3c;
+            color: white;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-size: 12px;
+            display: inline-flex;
+            align-items: center;
+            margin-right: 10px;
+        }
+        
+        .price-container {
+            margin: 10px 0;
+        }
+        
+        .current-price {
+            font-size: 22px;
+            font-weight: 500;
+            color: #212121;
+        }
+        
+        .original-price {
+            text-decoration: line-through;
+            color: #878787;
+            font-size: 16px;
+            margin-left: 8px;
+        }
+        
+        .discount-percent {
+            color: #388e3c;
+            font-size: 16px;
+            font-weight: 500;
+            margin-left: 8px;
+        }
+        
+        .delivery-info {
+            font-size: 14px;
+            color: #212121;
+            margin-bottom: 10px;
+        }
+        
+        .delivery-info .free-delivery {
+            color: #388e3c;
+        }
+        
+        .action-buttons {
+            margin-top: 15px;
+        }
+        
+        .btn-view {
+            background-color: var(--flipkart-blue);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 2px;
+            font-weight: 500;
+            margin-right: 10px;
+        }
+        
+        .btn-wishlist {
+            border: 1px solid #e0e0e0;
+            padding: 8px 20px;
+            border-radius: 2px;
+            font-weight: 500;
+        }
+        
+        /* Filters */
+        .filter-section {
+            background: white;
+            border-radius: 2px;
+            box-shadow: 0 1px 1px 0 rgba(0,0,0,.1);
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .filter-title {
+            font-size: 16px;
+            font-weight: 500;
+            color: #212121;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .filter-group {
+            margin-bottom: 20px;
+        }
+        
+        .filter-group-title {
+            font-size: 14px;
+            font-weight: 500;
+            color: #212121;
+            margin-bottom: 10px;
+        }
+        
+        /* Footer */
+        .main-footer {
+            background-color: var(--flipkart-dark);
+            color: white;
+            padding: 40px 0 20px;
+        }
+        
+        .footer-section {
+            margin-bottom: 30px;
+        }
+        
+        .footer-title {
+            font-size: 14px;
+            font-weight: 500;
+            color: #878787;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+        
+        .footer-links {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-links a {
+            color: white;
+            text-decoration: none;
+            font-size: 13px;
+        }
+        
+        .footer-links a:hover {
+            text-decoration: underline;
+        }
+        
+        .copyright {
+            border-top: 1px solid #454d5e;
+            padding-top: 20px;
+            font-size: 12px;
+            color: #878787;
+        }
+        
+        .social-icons {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .social-icons a {
+            color: white;
+            font-size: 20px;
+        }
+        
+        /* Breadcrumb */
+        .breadcrumb {
+            background-color: white;
+            border-radius: 2px;
+            padding: 12px 16px;
+            margin-bottom: 15px;
+        }
+        
+        .breadcrumb-item a {
+            color: var(--flipkart-blue);
+            text-decoration: none;
+        }
+        
+        /* Empty State */
+        .empty-state {
+            background: white;
+            padding: 40px;
+            text-align: center;
+            border-radius: 2px;
+            box-shadow: 0 1px 1px 0 rgba(0,0,0,.1);
+        }
+        
+        .empty-state i {
+            font-size: 50px;
+            color: #878787;
+            margin-bottom: 20px;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .product-item {
+                flex-direction: column;
+            }
+            
+            .product-img-container {
+                width: 100%;
+                height: auto;
+                margin-bottom: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+  <!-- Top Header -->
+<div class="top-header">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <div class="d-flex align-items-center">
+                    <div class="me-3">
+                        <i class="fas fa-bars me-2"></i>
+                        <span>Menu</span>
+                    </div>
+                    <div>
+                        <i class="fas fa-question-circle me-2"></i>
+                        <span>Help Center</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 text-end">
+                <div class="d-flex justify-content-end">
+                    {% if request.user.is_authenticated %}
+                        <div class="me-3">
+                            <i class="fas fa-user me-2"></i>
+                            <span>Welcome, {{ request.user.username }}</span>
+                        </div>
+                        <div>
+                            <i class="fas fa-sign-out-alt me-2"></i>
+                            <a href="{% url 'logout' %}">Logout</a>
+                        </div>
+                    {% else %}
+                        <div class="me-3">
+                            <i class="fas fa-user me-2"></i>
+                            <a href="{% url 'register' %}">Sign Up</a>
+                        </div>
+                        <div>
+                            <i class="fas fa-sign-in-alt me-2"></i>
+                            <a href="{% url 'login' %}" class="text-decoration-none text-reset">Login</a>
+
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <!-- Main Header -->
+    <header class="main-header py-2">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-2">
+                    <div class="logo">
+                        Flipkart<span>Plus</span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <form class="d-flex search-container">
+                        <input class="form-control search-box" type="search" placeholder="Search for products, brands and more" aria-label="Search">
+                        <button class="btn search-btn" type="submit"><i class="fas fa-search"></i></button>
+                    </form>
+                </div>
+                <div class="col-md-4">
+                    <div class="d-flex justify-content-end">
+                        <a href="#" class="header-action">
+                            <i class="fas fa-user"></i>
+                            <span>Account</span>
+                        </a>
+                        <a href="#" class="header-action">
+                            <i class="fas fa-question-circle"></i>
+                            <span>More</span>
+                        </a>
+                        <a href="#" class="header-action">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span>Cart</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Main Content -->
+    <main class="container my-4">
+        <!-- Breadcrumb -->
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="#">Home</a></li>
+                <li class="breadcrumb-item"><a href="#">Category</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Products</li>
+            </ol>
+        </nav>
+        
+        <div class="row">
+            <!-- Filters Sidebar -->
+            <div class="col-lg-3">
+                <div class="filter-section">
+                    <form method="get">
+                        <div class="filter-title">
+                            <span>Filters</span>
+                            <button type="button" class="btn btn-sm btn-link">Clear All</button>
+                        </div>
+                        
+                        <!-- Category Filter -->
+                        <div class="filter-group">
+                            <div class="filter-group-title">Categories</div>
+                            <select name="category" class="form-select">
+                                <option value="">All Categories</option>
+                                {% for cat in categories %}
+                                    <option value="{{ cat.name }}" {% if cat.name == request.GET.category %}selected{% endif %}>{{ cat.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        
+                        <!-- Price Range -->
+                        <div class="filter-group">
+                            <div class="filter-group-title">Price Range</div>
+                            <div class="row g-2">
+                                <div class="col">
+                                    <input type="number" name="min_price" class="form-control" placeholder="Min" value="{{ request.GET.min_price }}">
+                                </div>
+                                <div class="col">
+                                    <input type="number" name="max_price" class="form-control" placeholder="Max" value="{{ request.GET.max_price }}">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Discount -->
+                        <div class="filter-group">
+                            <div class="filter-group-title">Discount</div>
+                            <input type="number" name="min_discount" class="form-control" placeholder="Min Discount (%)" value="{{ request.GET.min_discount }}">
+                        </div>
+                        
+                        <button class="btn btn-primary w-100 mt-3" type="submit">Apply Filters</button>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Product Listing -->
+            <div class="col-lg-9">
+                <!-- Search and Sort -->
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div>
+                        <form method="get" class="d-flex">
+                            <input type="text" name="q" value="{{ search_query }}" class="form-control me-2" placeholder="Search products..." style="width: 250px;">
+                            <button class="btn btn-outline-secondary" type="submit">Search</button>
+                        </form>
+                    </div>
+                    <div>
+                        <span class="text-muted me-2">Sort by:</span>
+                        <select class="form-select d-inline-block" style="width: auto;">
+                            <option>Relevance</option>
+                            <option>Price -- Low to High</option>
+                            <option>Price -- High to Low</option>
+                            <option>Newest First</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <!-- Product List -->
+                {% if products %}
+                <div class="product-list-container">
+                    {% for product in products %}
+                    <div class="product-item">
+                        <div class="product-img-container">
+                            {% if product.image %}
+                                <img src="{{ product.image.url }}" class="product-img" alt="{{ product.name }}">
+                            {% else %}
+                                <div class="text-center text-muted">
+                                    <i class="fas fa-image fa-3x"></i>
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="product-details">
+                            <h3 class="product-title">{{ product.name }}</h3>
+                            <div class="product-seller">Seller: CompanyName</div>
+                            <div>
+                                <span class="product-rating">
+                                    <i class="fas fa-star" style="font-size: 10px; margin-right: 2px;"></i>
+                                    4.2
+                                </span>
+                                <span class="text-muted">(1,234 ratings)</span>
+                            </div>
+                            <div class="price-container">
+                                <span class="current-price">₹{{ product.price|floatformat:2 }}</span>
+                                {% if product.discount %}
+                                    <span class="original-price">₹{{ product.original_price|floatformat:2 }}</span>
+                                    <span class="discount-percent">{{ product.discount }}% off</span>
+                                {% endif %}
+                            </div>
+                            <div class="delivery-info">
+                                <span class="free-delivery">Free delivery</span>
+                                <span>Delivery by tomorrow</span>
+                            </div>
+                            <div class="stock-info">
+                                {% if product.stock > 10 %}
+                                    <span class="text-success">In Stock</span>
+                                {% elif product.stock > 0 %}
+                                    <span class="text-warning">Only {{ product.stock }} left!</span>
+                                {% else %}
+                                    <span class="text-danger">Out of Stock</span>
+                                {% endif %}
+                            </div>
+                            <div class="action-buttons">
+                                <a href="{% url 'product_detail' product.id %}" class="btn btn-view">VIEW DETAILS</a>
+                                <button class="btn btn-wishlist">
+                                    <i class="far fa-heart"></i> WISHLIST
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="empty-state">
+                    <i class="fas fa-search"></i>
+                    <h5>No products found</h5>
+                    <p class="text-muted">Try changing your search or filter criteria</p>
+                    <a href="?" class="btn btn-primary mt-2">Clear Filters</a>
+                </div>
+                {% endif %}
+                
+                <!-- Pagination -->
+                {% if products.has_other_pages %}
+                <nav class="mt-4">
+                    <ul class="pagination justify-content-center">
+                        {% if products.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page=1" aria-label="First">
+                                    <span aria-hidden="true">&laquo;&laquo;</span>
+                                </a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ products.previous_page_number }}" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+                        {% endif %}
+                        
+                        {% for i in products.paginator.page_range %}
+                            {% if products.number == i %}
+                                <li class="page-item active"><span class="page-link">{{ i }}</span></li>
+                            {% elif i > products.number|add:'-3' and i < products.number|add:'3' %}
+                                <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+                            {% endif %}
+                        {% endfor %}
+                        
+                        {% if products.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ products.next_page_number }}" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ products.paginator.num_pages }}" aria-label="Last">
+                                    <span aria-hidden="true">&raquo;&raquo;</span>
+                                </a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+                {% endif %}
+            </div>
+        </div>
+    </main>
+    
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3 col-6 footer-section">
+                    <h5 class="footer-title">About</h5>
+                    <ul class="footer-links">
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Flipkart Stories</a></li>
+                        <li><a href="#">Press</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3 col-6 footer-section">
+                    <h5 class="footer-title">Help</h5>
+                    <ul class="footer-links">
+                        <li><a href="#">Payments</a></li>
+                        <li><a href="#">Shipping</a></li>
+                        <li><a href="#">Cancellation & Returns</a></li>
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Report Infringement</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3 col-6 footer-section">
+                    <h5 class="footer-title">Policy</h5>
+                    <ul class="footer-links">
+                        <li><a href="#">Return Policy</a></li>
+                        <li><a href="#">Terms Of Use</a></li>
+                        <li><a href="#">Security</a></li>
+                        <li><a href="#">Privacy</a></li>
+                        <li><a href="#">Sitemap</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3 col-6 footer-section">
+                    <h5 class="footer-title">Social</h5>
+                    <div class="social-icons mb-3">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                    <h5 class="footer-title">Mail Us</h5>
+                    <p style="font-size: 13px;">
+                        Flipkart Internet Private Limited,<br>
+                        Buildings Alyssa, Begonia &<br>
+                        Clove Embassy Tech Village,<br>
+                        Bengaluru, 560103
+                    </p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 text-center copyright">
+                    <p>© 2023 Flipkart Clone. All Rights Reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

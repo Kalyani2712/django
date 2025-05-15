@@ -1,0 +1,19 @@
+<!-- emails/return_refund_notification.html -->
+
+<html>
+<body>
+    <h2>Update on Your Order #{{ order.id }}</h2>
+    <p>Dear {{ order.user.username }},</p>
+
+    {% if order.return_requested %}
+        <p>We've received your return request.</p>
+        <p><strong>Reason:</strong> {{ order.return_reason }}</p>
+    {% else %}
+        <p>No return was requested.</p>
+    {% endif %}
+
+    <p><strong>Refund Status:</strong> {{ order.get_refund_status_display }}</p>
+
+    <p>Thank you for shopping with us!</p>
+</body>
+</html>

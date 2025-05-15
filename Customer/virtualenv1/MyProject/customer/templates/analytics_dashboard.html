@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Analytics Dashboard - Admin</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">Admin Panel</a>
+      <div class="collapse navbar-collapse justify-content-end">
+        <ul class="navbar-nav">
+          <li class="nav-item"><a class="nav-link" href="{% url 'dashboard' %}">Dashboard</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'profile' %}">Profile</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">Logout</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Header -->
+  <header class="bg-primary text-white text-center py-4">
+    <h2>Analytics Dashboard</h2>
+  </header>
+
+  <!-- Stats Cards -->
+  <div class="container mt-4">
+    <div class="row text-center">
+      <div class="col-md-4">
+        <div class="card bg-light shadow-sm mb-4">
+          <div class="card-body">
+            <h5>Total Revenue</h5>
+            <h3>₹ {{ total_revenue }}</h3>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card bg-light shadow-sm mb-4">
+          <div class="card-body">
+            <h5>Total Orders</h5>
+            <h3>{{ total_orders }}</h3>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card bg-light shadow-sm mb-4">
+          <div class="card-body">
+            <h5>Total Customers</h5>
+            <h3>{{ total_customers }}</h3>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toggle for Weekly/Monthly Revenue -->
+    <div class="d-flex justify-content-center mb-4">
+      <button id="togglePeriod" class="btn btn-primary">Switch to Monthly</button>
+    </div>
+
+    <!-- Charts Section -->
+    <div class="row">
+      <div class="col-md-6 mb-4">
+        <canvas id="revenueTrendChart"></canvas>
+      </div>
+      <div class="col-md-6 mb-4">
+        <canvas id="salesCategoryChart"></canvas>
+      </div>
+      <div class="col-md-6 mb-4">
+        <canvas id="topProductsChart"></canvas>
+      </div>
+      <div class="col-md-6 mb-4">
+        <canvas id="customerGrowthChart"></canvas>
+      </div>
+    </div>
+
+    <!-- Download Buttons -->
+    <div class="d-flex justify-content-center mb-4">
+      <button id="downloadPNG" class="btn btn-success">Download as PNG</button>
+      <button id="downloadPDF" class="btn btn-danger ml-3">Download as PDF</button>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-dark text-white text-center py-3 mt-5">
+    <p>&copy; 2025 Flipkart Admin Panel</p>
+  </footer>
+
+  <!-- Chart.js Script -->
+  <script>
+    let chartData = {
+      revenueLabels: [],
+      revenueData: [],
+      period: 'weekly', // Default to weekly
+    };
+
+    fetch("{% url 'chart-data' %}")
+      .then(response => response.json())
+      .then(data => {
+        chartData.revenueLabels = data.revenue_labels;
+        chartData.revenueData = data.revenue_data;
+
+        // Revenue Trend Chart
+        let revenueTrendChart = new Chart(document.getElementById('revenueTrendChart'), {
+          type: 'line',
+          data: {
+            labels: chartData.revenueLabels,
+            datasets: [{
+              label: 'Revenue (₹)',
+              data: chartData.revenueData,
+              borderColor: 'blue',
+              backgroundColor: 'rgba(0,0,255,0.1)',
+              fill: true,
+              tension: 0.3
+            }]
+          }
+        });
+
+        // Sales by Category
+        new Chart(document.getElementById('salesCategoryChart'), {
+          type: 'bar',
+          data: {
+            labels: data.category_data.map(c => c.category),
+            datasets: [{
+              label: 'Sales',
+              data: data.category_data.map(c => c.total_sales),
+              backgroundColor: 'orange'
+            }]
+          }
+        });
+
+        // Top Selling Products
+        new Chart(document.getElementById('topProductsChart'), {
+          type: 'bar',
+          data: {
+            labels: data.top_products.map(p => p.name),
+            datasets: [{
+              label: 'Orders',
+              data: data.top_products.map(p => p.orders),
+              backgroundColor: 'green'
+            }]
+          }
+        });
+
+        // Customer Growth
+        new Chart(document.getElementById('customerGrowthChart'), {
+          type: 'line',
+          data: {
+            labels: data.customer_labels,
+            datasets: [{
+              label: 'New Customers',
+              data: data.customer_data,
+              borderColor: 'purple',
+              backgroundColor: 'rgba(128,0,128,0.1)',
+              fill: true,
+              tension: 0.3
+            }]
+          }
+        });
+
+        // Toggle Revenue Trends (Weekly/Monthly)
+        document.getElementById('togglePeriod').addEventListener('click', () => {
+          chartData.period = chartData.period === 'weekly' ? 'monthly' : 'weekly';
+          chartData.revenueLabels = chartData.period === 'weekly' ? data.revenue_labels : data.revenue_labels.slice(0, 12); // Adjust this based on your data
+          chartData.revenueData = chartData.period === 'weekly' ? data.revenue_data : data.revenue_data.slice(0, 12);
+          revenueTrendChart.data.labels = chartData.revenueLabels;
+          revenueTrendChart.data.datasets[0].data = chartData.revenueData;
+          revenueTrendChart.update();
+          document.getElementById('togglePeriod').innerText = chartData.period === 'weekly' ? 'Switch to Monthly' : 'Switch to Weekly';
+        });
+
+        // Download as PNG
+        document.getElementById('downloadPNG').addEventListener('click', () => {
+          const imgURL = revenueTrendChart.toBase64Image();
+          const link = document.createElement('a');
+          link.href = imgURL;
+          link.download = 'revenue_trend.png';
+          link.click();
+        });
+
+        // Download as PDF
+        document.getElementById('downloadPDF').addEventListener('click', () => {
+          const { jsPDF } = window.jspdf;
+          const doc = new jsPDF();
+          const imgData = revenueTrendChart.toBase64Image();
+          doc.addImage(imgData, 'PNG', 10, 10, 180, 160);
+          doc.save('revenue_trend.pdf');
+        });
+      });
+  </script>
+
+</body>
+</html>
