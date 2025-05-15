@@ -1,0 +1,49 @@
+
+{% block content %}
+<div class="dashboard-content">
+    <h2 class="section-title">Customer Management</h2>
+    
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+    
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Date Joined</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in customers %}
+            <tr>
+                <td>#{{ user.id }}</td>
+                <td>{{ user.username }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.date_joined|date:"M d, Y" }}</td>
+                <td>
+                    {% if user.is_active %}
+                        <span style="color: #388e3c;">Active</span>
+                    {% else %}
+                        <span style="color: #dc3545;">Blocked</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="{% url 'toggle_customer_status' user.id %}" class="btn {% if user.is_active %}btn-danger{% else %}btn-success{% endif %}">
+                        {% if user.is_active %}<i class="fas fa-ban"></i> Block{% else %}<i class="fas fa-check"></i> Activate{% endif %}
+                    </a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="6" style="text-align:center;">No customers found.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

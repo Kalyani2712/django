@@ -1,0 +1,161 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Item</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            padding-bottom: 60px;
+        }
+        header {
+            background-color: #343a40;
+            color: white;
+            padding: 10px 0;
+            text-align: center;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 2em;
+        }
+        footer {
+            background-color: #343a40;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+        footer p {
+            margin: 0;
+        }
+        .container {
+            max-width: 500px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            text-align: center;
+            font-size: 1.8em;
+            color: #343a40;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #495057;
+        }
+        input[type="text"],
+        input[type="number"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            font-size: 1em;
+            box-sizing: border-box;
+        }
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .add-button {
+            flex: 1;
+            padding: 12px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1em;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+        }
+        .add-button:hover {
+            background-color: #218838;
+        }
+        .cancel-button {
+            flex: 1;
+            padding: 12px;
+            background-color: #6c757d;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1em;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+        }
+        .cancel-button:hover {
+            background-color: #5a6268;
+        }
+        .messages {
+            margin: 15px 0;
+        }
+        .alert {
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .alert-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Add New Item</h1>
+    </header>
+
+    <div class="container">
+        <h2>Add Item Details</h2>
+        
+        <div class="messages">
+            {% for message in messages %}
+                <div class="alert {{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+        </div>
+        <form method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+                        <div class="button-group">
+                <button type="submit" class="add-button">Add Item</button>
+                <a href="{% url 'dashboard' %}" class="cancel-button">Cancel</a>
+            </div>
+        </form>
+        <div class="messages">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Our Company</p>
+    </footer>
+</body>
+</html>
